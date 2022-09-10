@@ -1,0 +1,7 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+server_list:
+    path: /servers
+    controller: App\Controller\ServersController::list

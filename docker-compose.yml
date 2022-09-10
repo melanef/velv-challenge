@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  local:
+    driver: bridge
+
+services:
+  backend-php:
+    build:
+      context: ./
+      dockerfile: devops/backend-php/Dockerfile
+      args:
+        WWWUSER: '${WWWUSER}'
+        WWWGROUP: '${WWWGROUP}'
+        WWWUID: '${WWWUID}'
+    volumes:
+      - ./src/backend:/var/www/html
+    image: velv-backend-php
+    container_name: velv-backend-php
+    restart: unless-stopped
+    networks:
+      - local
+
+  backend-nginx:
+    image: nginx:1.17-alpine
+    container_name: velv-backend-nginx
+    restart: unless-stopped
+    volumes:
+      - ./devops/backend-nginx:/etc/nginx/conf.d
+      - ./src/backend:/var/www/html
+    ports:
+      - '8000:80'
+    networks:
+      - local
+    depends_on:
+      - backend-php
+
+volumes:
+    mysql:
+        driver: local
