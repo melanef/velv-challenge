@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\VOs\Currency;
-use App\VOs\Hdd;
-use App\VOs\Ram;
+use App\VO\Currency;
+use App\VO\Hdd;
+use App\VO\Ram;
 
 class Server
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repository;
 
 use App\Entity\Server;
-use App\Params\ServerFilterParams;
+use App\Param\ServerFilterParams;
 
 interface ServerRepository
 {

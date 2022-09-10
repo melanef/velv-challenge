@@ -1,6 +1,6 @@
 <?php
 
-namespace App\VOs;
+namespace App\VO;
 
 use InvalidArgumentException;
 
@@ -15,7 +15,7 @@ class Currency
     public static function fromString(string $raw): self
     {
         if (!preg_match('/^(?<symbol>[^\d]+)(?<unit>\d+)\.(?<fraction>\d+)$/i', $raw, $matches)) {
-            throw new InvalidArgumentException(sprintf('Invalid raw RAM string: "%s"', $raw));
+            throw new InvalidArgumentException(sprintf('Invalid raw currency string: "%s"', $raw));
         }
 
         $currency = new self();
@@ -24,5 +24,15 @@ class Currency
         $currency->value = ($matches['unit'] * (10 ** $currency->decimalPlaces)) + $matches['fraction'];
 
         return $currency;
+    }
+
+    public function asString(): string
+    {
+        $divider = 10 ** $this->decimalPlaces;
+
+        $fraction = $this->value % $divider;
+        $unit = floor($this->value / $divider);
+
+        return sprintf('%s%d.%s', $this->symbol, $unit, str_pad($fraction, $this->decimalPlaces, '0'));
     }
 }

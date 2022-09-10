@@ -1,6 +1,6 @@
 <?php
 
-namespace App\VOs;
+namespace App\VO;
 
 use InvalidArgumentException;
 
@@ -14,7 +14,7 @@ class Ram
         self::TYPE_DDR4,
     ];
 
-    public LogicSpace $size;
+    public LogicalSpace $size;
 
     public string $type;
 
@@ -27,7 +27,7 @@ class Ram
     {
         $pattern = sprintf(
             '/^(?<amount>\d+)(?<unit>%s)(?<type>%s)$/i',
-            implode('|', LogicSpace::UNITS),
+            implode('|', LogicalSpace::UNITS),
             implode('|', self::TYPES)
         );
         if (!preg_match($pattern, $raw, $matches)) {
@@ -35,7 +35,7 @@ class Ram
         }
 
         $ram = new self();
-        $ram->size = LogicSpace::fromString(sprintf('%d%s', $matches['amount'], $matches['unit']));
+        $ram->size = LogicalSpace::fromString(sprintf('%d%s', $matches['amount'], $matches['unit']));
         $ram->type = $matches['type'];
 
         return $ram;

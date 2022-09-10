@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Params;
+namespace App\Param;
 
 class ServerFilterParams
 {

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Params\ServerFilterParams;
-use App\Repositories\ServerRepository;
+use App\Param\ServerFilterParams;
+use App\Repository\ServerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ class ServersController extends AbstractController
         }
 
         if ($request->query->has('ram_options')) {
-            $params->ramOptions = $request->query->get('ram_options');
+            $params->ramOptions = $request->query->all()['ram_options'];
         }
 
         if ($request->query->has('hdd_type')) {

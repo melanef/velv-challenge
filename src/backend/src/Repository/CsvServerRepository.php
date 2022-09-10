@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repository;
 
 use App\Entity\Server;
-use App\Params\ServerFilterParams;
-use App\VOs\Currency;
-use App\VOs\Hdd;
-use App\VOs\Ram;
+use App\Param\ServerFilterParams;
+use App\VO\Currency;
+use App\VO\Hdd;
+use App\VO\Ram;
 use RuntimeException;
 use Symfony\Component\Filesystem\Path;
+use Throwable;
 
 class CsvServerRepository implements ServerRepository
 {
@@ -54,7 +55,7 @@ class CsvServerRepository implements ServerRepository
                 continue;
             }
 
-            if ($params->ramOptions && in_array($server->ram->size->asString(), $params->ramOptions)) {
+            if ($params->ramOptions && !in_array($server->ram->size->asString(), $params->ramOptions, true)) {
                 continue;
             }
 
@@ -70,8 +71,10 @@ class CsvServerRepository implements ServerRepository
             return;
         }
 
-        if (($fp = fopen(Path::makeAbsolute($this->location, '/var/www/html/'), 'r')) === FALSE) {
-            throw new RuntimeException(sprintf('Couldn\'t open CSV Repository on file "%s"', $this->location));
+        try {
+            $fp = fopen(Path::makeAbsolute($this->location, '/var/www/html/'), 'r');
+        } catch (Throwable $throwable) {
+            throw new RuntimeException(sprintf('Couldn\'t open CSV Repository on file "%s"', $this->location), 0, $throwable);
         }
 
         while (($row = fgetcsv($fp, 1000, ",")) !== FALSE) {

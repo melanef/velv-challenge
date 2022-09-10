@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    app.csv_repositories.servers: resources/servers.csv
+    app.csv_repositories.servers:  resources/servers.csv
 
 services:
     # default configuration for services in *this* file
@@ -13,7 +13,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
         bind:
-            App\Repositories\ServerRepository: '@App\Repositories\CsvServerRepository'
+            App\Repository\ServerRepository: '@App\Repository\CsvServerRepository'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -26,7 +26,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Repositories\CsvServerRepository:
+    App\Repository\CsvServerRepository:
         public: true
         arguments:
             $location: '%app.csv_repositories.servers%'

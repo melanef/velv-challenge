@@ -1,10 +1,10 @@
 <?php
 
-namespace App\VOs;
+namespace App\VO;
 
 use InvalidArgumentException;
 
-class LogicSpace
+class LogicalSpace
 {
     public const UNIT_GB = 'GB';
     public const UNIT_TB = 'TB';
@@ -47,22 +47,22 @@ class LogicSpace
         return sprintf('%d%s', $this->amount, $this->unit);
     }
 
-    public function isGreaterAndEqualThan(LogicSpace $other): bool
+    public function isGreaterThanOrEqual(LogicalSpace $other): bool
     {
         return $this->normalize() >= $other->normalize();
     }
 
-    public function isGreaterThan(LogicSpace $other): bool
+    public function isGreaterThan(LogicalSpace $other): bool
     {
         return $this->normalize() > $other->normalize();
     }
 
-    public function isLesserAndEqualThan(LogicSpace $other): bool
+    public function isLesserThanOrEqual(LogicalSpace $other): bool
     {
         return $this->normalize() <= $other->normalize();
     }
 
-    public function isLesserThan(LogicSpace $other): bool
+    public function isLesserThan(LogicalSpace $other): bool
     {
         return $this->normalize() < $other->normalize();
     }

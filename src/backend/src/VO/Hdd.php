@@ -1,6 +1,6 @@
 <?php
 
-namespace App\VOs;
+namespace App\VO;
 
 use InvalidArgumentException;
 
@@ -18,7 +18,7 @@ class Hdd
 
     public int $disks;
 
-    public LogicSpace $size;
+    public LogicalSpace $size;
 
     public string $type;
 
@@ -31,42 +31,47 @@ class Hdd
     {
         $pattern = sprintf(
             '/^(?<disks>\d+)x(?<amount>\d+)(?<unit>%s)(?<type>%s)$/i',
-            implode('|', LogicSpace::UNITS),
+            implode('|', LogicalSpace::UNITS),
             implode('|', self::TYPES)
         );
         if (!preg_match($pattern, $raw, $matches)) {
-            throw new InvalidArgumentException(sprintf('Invalid raw RAM string: "%s"', $raw));
+            throw new InvalidArgumentException(sprintf('Invalid raw HDD string: "%s"', $raw));
         }
 
         $hdd = new self();
         $hdd->disks = $matches['disks'];
-        $hdd->size = LogicSpace::fromString(sprintf('%d%s', $matches['amount'], $matches['unit']));
+        $hdd->size = LogicalSpace::fromString(sprintf('%d%s', $matches['amount'], $matches['unit']));
         $hdd->type = $matches['type'];
 
         return $hdd;
     }
 
-    public function isGreaterAndEqualThan(string $rawSize): bool
+    public function getSizeString(): string
     {
-        return $this->getComputedSize()->isGreaterAndEqualThan(LogicSpace::fromString($rawSize));
+        return $this->getComputedSize()->asString();
+    }
+
+    public function isGreaterThanOrEqual(string $rawSize): bool
+    {
+        return $this->getComputedSize()->isGreaterThanOrEqual(LogicalSpace::fromString($rawSize));
     }
 
     public function isGreaterThan(string $rawSize): bool
     {
-        return $this->getComputedSize()->isGreaterThan(LogicSpace::fromString($rawSize));
+        return $this->getComputedSize()->isGreaterThan(LogicalSpace::fromString($rawSize));
     }
 
-    public function isLesserAndEqualThan(string $rawSize): bool
+    public function isLesserThanOrEqual(string $rawSize): bool
     {
-        return $this->getComputedSize()->isLesserAndEqualThan(LogicSpace::fromString($rawSize));
+        return $this->getComputedSize()->isLesserThanOrEqual(LogicalSpace::fromString($rawSize));
     }
 
     public function isLesserThan(string $rawSize): bool
     {
-        return $this->getComputedSize()->isLesserThan(LogicSpace::fromString($rawSize));
+        return $this->getComputedSize()->isLesserThan(LogicalSpace::fromString($rawSize));
     }
 
-    private function getComputedSize(): LogicSpace
+    private function getComputedSize(): LogicalSpace
     {
         $computedSize = clone $this->size;
         $computedSize->amount = $this->disks * $this->size->amount;
