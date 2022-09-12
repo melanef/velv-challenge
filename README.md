@@ -22,4 +22,5 @@ The frontend will be available on http://localhost:5173
 ## Tests
 
 There are unit tests and application tests for the backend. Run them using the docker environment:
+
 ```docker exec velv-backend-php php bin/phpunit```
